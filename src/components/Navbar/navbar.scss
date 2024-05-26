@@ -1,0 +1,67 @@
+@use "base" as *;
+
+.navbar {
+  color: $font-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // border: 2px solid black;
+
+  .navbar__logo {
+    img {
+      width: 150px;
+    }
+  }
+  .navbar__menu__left {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40%;
+    // border: 2px solid black;
+
+
+    .navbar__menu__item {
+      margin-right: 10px;
+
+      .navbar__link {
+        color: $font-color;
+        text-decoration: none;
+        font-size: 19px;
+        font-weight: 600;
+
+        &:hover {
+          color: $blue-color;
+        }
+      }
+
+      .active {
+        color: $blue-color;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .navbar__menu__right {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    align-items: center;
+    width: 20%;
+    // border: 2px solid black;
+
+
+    .navbar__btn {
+      background-color: $button-background-color;
+      color: $button-font-color;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 19px;
+    }
+
+    .navbar__btn:hover {
+      background-color: $button-hover-background-color;
+    }
+  }
+}
