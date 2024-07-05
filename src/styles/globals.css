@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 94%;
+    --foreground: 0 0% 5%;
+    --card: 0 0% 94%;
+    --card-foreground: 0 0% 5%;
+    --popover: 0 0% 94%;
+    --popover-foreground: 0 0% 5%;
+    --primary: 164 92% 48%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 85%;
+    --secondary-foreground: 0 0% 5%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 5%;
+    --accent-foreground: 0 0% 94%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 5%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 40%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 6%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 164 92% 52%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 80%;
+    --muted-foreground: 0 0% 95%;
+    --accent: 0 0% 95%;
+    --accent-foreground: 0 0% 6%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 10%;
+    --border: 0 0% 60%;
+    --input: 0 0% 80%;
+    --ring: 0 0% 60%;
+  }
+}
+
+@layer base {
+  html,
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+    text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply font-sans text-base;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply scroll-mt-16 font-heading font-semibold slashed-zero tracking-tight;
+  }
+
+  section {
+    @apply py-8;
+  }
+
+  * {
+    @apply border-border;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+}
