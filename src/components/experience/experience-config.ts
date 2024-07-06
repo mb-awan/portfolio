@@ -26,7 +26,7 @@ export const experiences: ExperienceItem[] = [
     company: 'Megaverse Technologies',
 
     date: {
-      end: 'March 2024',
+      end: 'Present',
       start: 'August 2023',
     },
     description:
