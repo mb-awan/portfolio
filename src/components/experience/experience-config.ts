@@ -30,7 +30,7 @@ export const experiences: ExperienceItem[] = [
       start: 'August 2023',
     },
     description:
-      'Developed a react chrome extension - Seller Dash. A Daraz product hunting tool, was built using React, TypeScript, Express and Postgres and Sql later on. The extension has over 1000+ users and 4.5 star rating on Chrome Web Store.',
+      'Developed a react chrome extension - Seller Dash. A Daraz product hunting tool, was built using React, TypeScript, Express and Postgres and Sql later on. The extension has over 10,000+ users and 4.5 star rating on Chrome Web Store.',
     employmentType: EmploymentType.FullTime,
     image: '/assets/companies/megaverse.png',
     skills: ['React', 'Express', 'Postgress', 'SQL', 'TypeScript', 'Strapi', 'SCSS', 'Chrome Extension'],
