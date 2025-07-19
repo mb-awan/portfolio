@@ -45,7 +45,7 @@ export const experiences: ExperienceItem[] = [
     description:
       'Mainly Worked on Xenon Store and Meta Clout backend, Xenon Store is an e-commerece store while Meta Clout is a social media marketing app to sale and consume different art works. It was built using React, TypeScript, NestJS, and MongoDB.',
     employmentType: EmploymentType.FullTime,
-    image: '/assets/companies/celestials.jfif',
+    image: '/assets/companies/celestials.jpg',
     skills: ['NestJS', 'React', 'TypeScript', 'Express', 'MongoDB', 'Postgres'],
     title: 'MERN Stack Developer',
   },
