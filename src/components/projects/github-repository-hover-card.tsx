@@ -1,11 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import ReactPlayer from 'react-player';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
-// import { Star } from 'lucide-react';
-import Link from 'next/link'; // Import the Image component from the appropriate library
 
 import { RenderIf } from '@/components/common/render-if';
 import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +14,6 @@ import { Button } from '../ui/button';
 
 interface GitHubRepositoryHoverCardProps {
   className?: string;
-  // items: GithubRepo[];
   items: MbAwanProjects[];
 }
 
@@ -34,20 +32,20 @@ export const GitHubRepositoryHoverCard: React.FC<GitHubRepositoryHoverCardProps>
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-2', gridLayoutClass, className)}>
       {items.map((item, idx) => (
-        <Link
-          className="group relative block size-full p-2"
-          href={item.repo}
-          key={item.repo}
+        <div
+          className="group relative block size-full cursor-pointer p-2"
+          key={item.repo ?? item.name}
+          // onClick={() => {
+          //   if (item.url) window.open(item.url, '_blank');
+          //   else if (item.video) window.open(item.video, '_blank');
+          // }}
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                animate={{
-                  opacity: 1,
-                  transition: { duration: 0.15 },
-                }}
+                animate={{ opacity: 1, transition: { duration: 0.15 } }}
                 className="absolute inset-0 block size-full rounded-lg bg-card-foreground text-card-foreground shadow-sm"
                 exit={{ opacity: 0, transition: { delay: 0.2, duration: 0.15 } }}
                 initial={{ opacity: 0 }}
@@ -55,12 +53,23 @@ export const GitHubRepositoryHoverCard: React.FC<GitHubRepositoryHoverCardProps>
               />
             )}
           </AnimatePresence>
+
           <Card>
-            <CardHeader className="p-0">
-              {item?.thumbnail ? (
-                <Image alt={item.name} className="w-full rounded-t-md" height={200} src={item.thumbnail} width={300} />
+            <CardHeader className="h-[300px] w-full object-cover p-0">
+              {item?.video && hoveredIndex === idx ? (
+                // <video autoPlay className="h-[200px] w-full rounded-t-md object-cover" loop muted src={item.video} />
+                <ReactPlayer
+                  autoPlay={true}
+                  className="h-[300px] w-full rounded-t-md object-cover"
+                  height={200}
+                  loop={true}
+                  muted={false}
+                  src={item.video}
+                />
+              ) : item?.thumbnail ? (
+                <img alt={item.name} className="max-h-[270px] w-full rounded-t-md" src={item.thumbnail} />
               ) : (
-                <> </>
+                <div className="h-[300px] w-full rounded-t-md bg-muted" />
               )}
               <CardTitle className="font-heading text-xl md:text-2xl">
                 <h2>{item.name}</h2>
@@ -73,28 +82,39 @@ export const GitHubRepositoryHoverCard: React.FC<GitHubRepositoryHoverCardProps>
                   {`${item?.description?.substring(0, 100)}...`}
                 </RenderIf>
               </CardDescription>
-              <Button className="mt-2" onClick={() => window.open(item?.url)} variant="outline">
-                {' '}
-                Live Demo{' '}
-              </Button>
-              {item?.repo ? (
-                <Button className="ml-2 mt-2" onClick={() => window.open(item?.repo)} variant="outline">
-                  {' '}
-                  Repository{' '}
+
+              {/* Demo Button */}
+              {(item?.url || item?.video) && (
+                <Button
+                  className="mt-2"
+                  onClick={(e) => {
+                    e.stopPropagation(); // prevent card click
+                    window.open(item?.url ?? item?.video, '_blank');
+                  }}
+                  variant="outline"
+                >
+                  Live Demo
                 </Button>
-              ) : (
-                <></>
+              )}
+
+              {/* Repo Button */}
+              {item?.repo && (
+                <Button
+                  className="ml-2 mt-2"
+                  onClick={(e) => {
+                    e.stopPropagation(); // prevent card click
+                    window.open(item.repo, '_blank');
+                  }}
+                  variant="outline"
+                >
+                  Repository
+                </Button>
               )}
             </CardContent>
 
-            <CardFooter className="p-0">
-              {/* <CardDescription className="flex items-center gap-1 text-sm/normal">
-                <Star className="size-3 md:size-4" />
-                {item.stars}
-              </CardDescription> */}
-            </CardFooter>
+            <CardFooter className="p-0" />
           </Card>
-        </Link>
+        </div>
       ))}
     </div>
   );
@@ -104,7 +124,7 @@ export const Card = ({ children, className }: { children: React.ReactNode; class
   return (
     <div className={cn('relative z-20 size-full rounded-md bg-card text-card-foreground shadow-sm', className)}>
       <div className="relative z-50">
-        <div className="flex flex-col space-y-1 p-3.5">{children}</div>
+        <div className="flex flex-col space-y-1">{children}</div>
       </div>
     </div>
   );

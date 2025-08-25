@@ -1,12 +1,93 @@
 export const mbAwanProjects = [
   {
     description:
+      'UnifyPosts is a multi-platform social media management tool that allows users to integrate their social accounts (YouTube, X, BlueSky, Instagram, Facebook, Twitter, Pinterest, Threads) using OAuth, upload media schedule posts, and create graphics with a Canva-like editor',
+    name: 'UnifyPosts',
+    technologies: [
+      'Team Leadership',
+      'Next.js',
+      'Node.js',
+      'Express.js',
+      'MongoDB',
+      'Redis',
+      'OAuth',
+      'BullMQ',
+      'Lambda functions',
+      'Cloudflare R2',
+      'CI/CD pipelines',
+      'Presigned URLs',
+    ],
+    thumbnail: '/assets/projects/unifyposts.jpg',
+    video: 'https://drive.google.com/file/d/17X9XqadDUQAlHNSYx7WrZ0_NweSiTP9O/view?usp=drive_link',
+  },
+  {
+    description:
+      'Wrytify is an AI-driven blog generation platform that allows users to integrate WordPress, Shopify, Blogger, and Wix sites to generate and manage blog posts through a centralized platform.',
+    name: 'Wrytify',
+    technologies: [
+      'Team Leadership',
+      'Next.js',
+      'Node.js',
+      'Express.js',
+      'OAuth',
+      'MongoDB',
+      'WordPress APIs Integration',
+      'Shopify APIs Integration',
+      'Blogger APIs Integration',
+      'Wix APIs Integration',
+      'Backend Development',
+    ],
+    thumbnail: '/assets/projects/wrytify.jpg',
+    video: 'https://drive.google.com/file/d/1mtSJKpg6xPIPgMWWdYpiSzZA82_VYgLS/view?usp=drive_link',
+  },
+  {
+    description:
+      'A Chrome extension designed for Daraz sellers to assist with product hunting and provide important seller stats and insights.',
+    name: 'SellerDash',
+    technologies: [
+      'React',
+      'Node.js',
+      'Express.js',
+      'MySQL',
+      'Chrome Extension Development',
+      'API Integration',
+      'Frontend Development',
+    ],
+    thumbnail: '/assets/projects/seller-dash.jpg',
+    video: 'https://drive.google.com/file/d/18akBw-zsCKYsjcJE58ti3a7OfW5465bw/view?usp=drive_link',
+  },
+  {
+    description:
+      'A Webflow extension that allows users to add analog clocks to their websites. The clocks are customizable with user-selected time zones, and a custom script is added when publishing the site to start the clock.',
+    name: 'FlowClock',
+    technologies: ['React', 'Next.js', 'JavaScript', 'Webflow Data Client', 'Designer Extensions'],
+    thumbnail: '/assets/projects/flow-clock.jpg',
+    video: 'https://drive.google.com/file/d/1uZNy_auhFJgY2ScaNDxv9ZR9_X6VN95I/view?usp=drive_link',
+  },
+  {
+    description:
+      'Developed a Four In Line game using C# Forms, focusing on backend logic and UI design.and it include both player vs player and player vs computer modes.',
+    name: 'Four In Line Game',
+    technologies: ['HTML', 'CSS', 'JS'],
+    thumbnail: '/assets/projects/four-in-line-game.jpg',
+    video: 'https://drive.google.com/file/d/1iv_SSPGTGAEZ0ni3xg1PRM1pndQQ4GEg/view?usp=drive_link',
+  },
+  {
+    description: 'Built a robust backend for an social media platform, providing images sales purchase.',
+    name: 'MetaClout',
+    technologies: ['React', 'Tailwind', 'Firebase'],
+    thumbnail: '/assets/projects/meta-clout.jpg',
+    video: 'https://drive.google.com/file/d/1DPeEzUBoItEj0JRmFTNK2HUCbK0lB1Zi/view?usp=drive_link',
+  },
+  {
+    description:
       'This is a snake game built using HTML, CSS, and JavaScript, where the user can control the snake using arrow keys on desktop, Its reponsive provide buttons for the mobile users as well',
     name: 'Snake Game',
     repo: 'https://github.com/mb-awan/snake-game.git',
     technologies: ['HTML', 'CSS', 'JS'],
     thumbnail: '/assets/projects/snake-game.png',
     url: 'https://snake-game-bay-two.vercel.app/',
+    video: 'https://drive.google.com/file/d/1t3tTirRS9uVghRlUJs14C-a6dkn5kama/view?usp=drive_link',
   },
   {
     description:
@@ -16,6 +97,7 @@ export const mbAwanProjects = [
     technologies: ['HTML', 'CSS', 'JS'],
     thumbnail: '/assets/projects/tik-tak-toe-game.png',
     url: 'https://tik-tak-toe-gold.vercel.app/',
+    video: 'https://drive.google.com/file/d/1p-NB5mshgvxRQoPW9gjSIFmiqp4Q6FTB/view?usp=drive_link',
   },
   {
     description:
@@ -78,6 +160,7 @@ export const mbAwanProjects = [
     technologies: ['HTML', 'CSS', 'JS', 'Bootstrap'],
     thumbnail: '/assets/projects/old-portfolio.png',
     url: 'https://portfolio-1-tan-nine.vercel.app/',
+    video: 'https://drive.google.com/file/d/10AENXA1zCacpqMboBUXrtafr0tZZkv-K/view?usp=drive_link',
   },
   {
     description:

@@ -21,10 +21,11 @@ declare global {
   type MbAwanProjects = {
     description: string;
     name: string;
-    repo: string;
+    repo?: string;
     technologies: string[];
-    thumbnail: string;
-    url: string;
+    thumbnail?: string;
+    url?: string;
+    video?: string;
   };
 
   /**
