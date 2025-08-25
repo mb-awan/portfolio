@@ -5,7 +5,7 @@ export const siteConfig = {
     logo: '/assets/images/logo.png',
     resume: '/assets/resume/Muhammad-Bilal-Resume-2025.pdf',
   },
-  description: 'Software Engineer, cricket player based in Lahore, Pakistan.',
+  description: 'Software Engineer, PUCITian, MERN Stack Developer based in Lahore, Pakistan.',
   keywords: [
     'Next.js',
     'TypeScript',

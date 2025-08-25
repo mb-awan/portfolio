@@ -15,12 +15,12 @@ export function About() {
         }}
       >
         <CardDescription className="space-y-4 text-foreground">
-          <p>Hi 👋 I&apos;m a software engineer, PUCITian, cricket player, based in Lahore, Pakistan</p>
+          <p>Hi 👋 I&apos;m a software engineer, PUCITian, MERN Stack Developer and based in Lahore, Pakistan</p>
           <p>As a Pakistani, I strive to succeed and push my legacy forward through my work and personal projects.</p>
 
           <p>
-            As a software engineer, I have experience in building web applications, chrome extensions, and webflow
-            designer extensions and hybrid apps.
+            As a software engineer, I have experience in building web applications specially focused on the web SAAS
+            applications in MERN stack, chrome extensions, and webflow designer extensions and hybrid apps.
           </p>
         </CardDescription>
       </Reveal>

@@ -2,35 +2,37 @@ import { EmploymentType } from '@/types/enum';
 
 export const experiences: ExperienceItem[] = [
   {
-    company: 'Upwork',
+    company: 'Slark Labs - (Startup)',
     date: {
-      end: 'Present',
-      start: 'Mar 2024',
+      end: 'August 2025',
+      start: 'February 2024',
     },
     description:
-      "I'm a freelance software engineer, working on various projects for clients around the world. I specialize in building web applications using React, Next.js, and Tailwind CSS.",
+      'I worked on SaaS applications UnifyPosts and Wrytify, as well as Webflow extensions and AWS Lambda functions. I also helped set up management tools, led the team, and trained interns while managing their contributions.',
     employmentType: EmploymentType.FullTime,
     image: '/assets/companies/upwork.jpg',
     skills: [
-      'React',
+      'SAAS Apps',
+      'Team Leading',
+      'Next',
       'TypeScript',
       'Express',
-      'MySQL',
+      'Redis',
+      'BullMQ',
       'MongoDB',
       'Webflow Extension and API',
-      'Shopware Theme Development',
     ],
-    title: 'Software Engineer (Freelance)',
+    title: 'Software Engineer and Lead Developer',
   },
   {
     company: 'Megaverse Technologies',
 
     date: {
-      end: 'Present',
+      end: 'January 2024',
       start: 'August 2023',
     },
     description:
-      'Developed a react chrome extension - Seller Dash. A Daraz product hunting tool, was built using React, TypeScript, Express and Postgres and Sql later on. The extension has over 10,000+ users and 4.5 star rating on Chrome Web Store.',
+      'Developed a react chrome extension - Seller Dash. A Daraz product hunting tool, was built using React, TypeScript, Express and Postgres and Sql later on. The extension has over 20,000+ users and 4.1 star rating on Chrome Web Store.',
     employmentType: EmploymentType.FullTime,
     image: '/assets/companies/megaverse.png',
     skills: ['React', 'Express', 'Postgress', 'SQL', 'TypeScript', 'Strapi', 'SCSS', 'Chrome Extension'],
