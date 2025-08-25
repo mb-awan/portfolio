@@ -16,7 +16,11 @@ export const Projects: React.FC<ProjectsProps> = ({ repositories }) => {
         Projects
       </h2>
       <GitHubRepositoryHoverCard items={repositories} />
-      <Link className="mt-2 flex justify-end text-sm underline" href={siteConfig.links.githubRepositories}>
+      <Link
+        className="mt-2 flex justify-end text-sm underline"
+        href={siteConfig.links.youtubePlaylist || siteConfig.links.githubRepositories}
+        target="_blank"
+      >
         See More...
       </Link>
     </section>

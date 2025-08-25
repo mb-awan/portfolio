@@ -67,6 +67,8 @@ export const siteConfig = {
     githubRepo: 'https://github.com/Muhammad-Bilal-official/portfolio1',
     githubRepositories: 'https://github.com/mb-awan?tab=repositories',
     linkedin: 'https://www.linkedin.com/in/muhammad-bilal-4299291b2/',
+    youtubeChannel: 'https://www.youtube.com/@MBNNTTech-Academy',
+    youtubePlaylist: 'https://youtube.com/playlist?list=PLaGBCyF425bD8faI0zAZjQZxbdrkPcojP&si=Wn7HUbefE_TN3Pzi',
   },
   name: 'Muhammad Bilal',
   opImage: '/og-image.png',

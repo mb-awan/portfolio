@@ -28,6 +28,13 @@ export function SiteHeader() {
               <span className="sr-only">LinkedIn</span>
             </div>
           </Link>
+
+          <Link href={siteConfig.links.youtubeChannel} rel="noreferrer" target="_blank">
+            <div className={cn(buttonVariants({ variant: 'ghost' }), 'w-9 px-0')}>
+              <Icons.youtube className="size-4" />
+              <span className="sr-only">YouTube</span>
+            </div>
+          </Link>
           <ModeToggleButton className="hidden md:flex" />
           <MobileNav />
         </div>

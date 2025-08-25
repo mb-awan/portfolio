@@ -18,7 +18,7 @@ export const mbAwanProjects = [
       'Presigned URLs',
     ],
     thumbnail: '/assets/projects/unifyposts.jpg',
-    video: 'https://drive.google.com/file/d/17X9XqadDUQAlHNSYx7WrZ0_NweSiTP9O/view?usp=drive_link',
+    video: 'https://youtu.be/-Bm-n0nNp0g',
   },
   {
     description:
@@ -38,7 +38,7 @@ export const mbAwanProjects = [
       'Backend Development',
     ],
     thumbnail: '/assets/projects/wrytify.jpg',
-    video: 'https://drive.google.com/file/d/1mtSJKpg6xPIPgMWWdYpiSzZA82_VYgLS/view?usp=drive_link',
+    video: 'https://youtu.be/bShtj7iymzk',
   },
   {
     description:
@@ -54,7 +54,7 @@ export const mbAwanProjects = [
       'Frontend Development',
     ],
     thumbnail: '/assets/projects/seller-dash.jpg',
-    video: 'https://drive.google.com/file/d/18akBw-zsCKYsjcJE58ti3a7OfW5465bw/view?usp=drive_link',
+    video: 'https://youtu.be/lzC_20whw-8',
   },
   {
     description:
@@ -62,7 +62,7 @@ export const mbAwanProjects = [
     name: 'FlowClock',
     technologies: ['React', 'Next.js', 'JavaScript', 'Webflow Data Client', 'Designer Extensions'],
     thumbnail: '/assets/projects/flow-clock.jpg',
-    video: 'https://drive.google.com/file/d/1uZNy_auhFJgY2ScaNDxv9ZR9_X6VN95I/view?usp=drive_link',
+    video: 'https://youtu.be/rhkiCTs_Wm4',
   },
   {
     description:
@@ -70,14 +70,14 @@ export const mbAwanProjects = [
     name: 'Four In Line Game',
     technologies: ['HTML', 'CSS', 'JS'],
     thumbnail: '/assets/projects/four-in-line-game.jpg',
-    video: 'https://drive.google.com/file/d/1iv_SSPGTGAEZ0ni3xg1PRM1pndQQ4GEg/view?usp=drive_link',
+    video: 'https://youtu.be/MXaBEtOyhz0',
   },
   {
     description: 'Built a robust backend for an social media platform, providing images sales purchase',
     name: 'MetaClout',
     technologies: ['React', 'Tailwind', 'Firebase'],
     thumbnail: '/assets/projects/meta-clout.jpg',
-    video: 'https://drive.google.com/file/d/1DPeEzUBoItEj0JRmFTNK2HUCbK0lB1Zi/view?usp=drive_link',
+    video: 'https://youtu.be/CTPK1nQPGLM',
   },
   {
     description:
@@ -87,17 +87,17 @@ export const mbAwanProjects = [
     technologies: ['HTML', 'CSS', 'JS'],
     thumbnail: '/assets/projects/snake-game.png',
     url: 'https://snake-game-bay-two.vercel.app/',
-    video: 'https://drive.google.com/file/d/1t3tTirRS9uVghRlUJs14C-a6dkn5kama/view?usp=drive_link',
+    video: 'https://youtu.be/26nW0H4Eokk',
   },
   {
     description:
       'This is a tik tak toe game built using HTML, CSS, and JavaScript, where two users can play the game at the same computer',
-    name: 'tik tak toe',
+    name: 'Tic Tac Toe Game',
     repo: 'https://github.com/mb-awan/tik-tak-toe.git',
     technologies: ['HTML', 'CSS', 'JS'],
     thumbnail: '/assets/projects/tik-tak-toe-game.png',
     url: 'https://tik-tak-toe-gold.vercel.app/',
-    video: 'https://drive.google.com/file/d/1p-NB5mshgvxRQoPW9gjSIFmiqp4Q6FTB/view?usp=drive_link',
+    video: 'https://youtu.be/iCdbFTi2tvY',
   },
   {
     description:
@@ -154,13 +154,13 @@ export const mbAwanProjects = [
     url: 'https://analogue-clock-alpha.vercel.app/',
   },
   {
-    description: 'This is my old portfolio built using HTML, CSS, Bootstrap and JavaScript',
+    description: 'My initial portfolio showcasing basic projects, including interactive web pages and basic CRUD apps.',
     name: 'Old Portfolio',
     repo: 'https://github.com/mb-awan/portfolio-1.git',
     technologies: ['HTML', 'CSS', 'JS', 'Bootstrap'],
     thumbnail: '/assets/projects/old-portfolio.png',
     url: 'https://portfolio-1-tan-nine.vercel.app/',
-    video: 'https://drive.google.com/file/d/10AENXA1zCacpqMboBUXrtafr0tZZkv-K/view?usp=drive_link',
+    video: 'https://youtu.be/acnMeUYJxWA',
   },
   {
     description:
