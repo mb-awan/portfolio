@@ -70,7 +70,7 @@ export const siteConfig = {
   },
   name: 'Muhammad Bilal',
   opImage: '/og-image.png',
-  siteTitle: 'Muhammad Bilal Nadeem Awan',
+  siteTitle: 'Muhammad Bilal',
   url: new URL('https://www.muhammad-bilal-nadeem-awan.com/'),
 };
 

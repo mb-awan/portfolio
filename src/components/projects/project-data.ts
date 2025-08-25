@@ -22,7 +22,7 @@ export const mbAwanProjects = [
   },
   {
     description:
-      'Wrytify is an AI-driven blog generation platform that allows users to integrate WordPress, Shopify, Blogger, and Wix sites to generate and manage blog posts through a centralized platform.',
+      'Wrytify is an AI-driven blog generation platform that allows users to integrate WordPress, Shopify, Blogger, and Wix sites to generate and manage blog posts through a centralized platform',
     name: 'Wrytify',
     technologies: [
       'Team Leadership',
@@ -42,7 +42,7 @@ export const mbAwanProjects = [
   },
   {
     description:
-      'A Chrome extension designed for Daraz sellers to assist with product hunting and provide important seller stats and insights.',
+      'A Chrome extension designed for Daraz sellers to assist with product hunting and provide important seller stats and insights',
     name: 'SellerDash',
     technologies: [
       'React',
@@ -58,7 +58,7 @@ export const mbAwanProjects = [
   },
   {
     description:
-      'A Webflow extension that allows users to add analog clocks to their websites. The clocks are customizable with user-selected time zones, and a custom script is added when publishing the site to start the clock.',
+      'A Webflow extension that allows users to add analog clocks to their websites. The clocks are customizable with user-selected time zones, and a custom script is added when publishing the site to start the clock',
     name: 'FlowClock',
     technologies: ['React', 'Next.js', 'JavaScript', 'Webflow Data Client', 'Designer Extensions'],
     thumbnail: '/assets/projects/flow-clock.jpg',
@@ -66,14 +66,14 @@ export const mbAwanProjects = [
   },
   {
     description:
-      'Developed a Four In Line game using C# Forms, focusing on backend logic and UI design.and it include both player vs player and player vs computer modes.',
+      'Developed a Four In Line game using C# Forms, focusing on backend logic and UI design.and it include both player vs player and player vs computer modes',
     name: 'Four In Line Game',
     technologies: ['HTML', 'CSS', 'JS'],
     thumbnail: '/assets/projects/four-in-line-game.jpg',
     video: 'https://drive.google.com/file/d/1iv_SSPGTGAEZ0ni3xg1PRM1pndQQ4GEg/view?usp=drive_link',
   },
   {
-    description: 'Built a robust backend for an social media platform, providing images sales purchase.',
+    description: 'Built a robust backend for an social media platform, providing images sales purchase',
     name: 'MetaClout',
     technologies: ['React', 'Tailwind', 'Firebase'],
     thumbnail: '/assets/projects/meta-clout.jpg',
