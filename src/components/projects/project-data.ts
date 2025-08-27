@@ -75,7 +75,7 @@ export const mbAwanProjects = [
   {
     description: 'Built a robust backend for an social media platform, providing images sales purchase',
     name: 'MetaClout',
-    technologies: ['React', 'Tailwind', 'Firebase'],
+    technologies: ['NestJS', 'MongoDB', 'Swagger UI for API Documentation', 'TypeScript'],
     thumbnail: '/assets/projects/meta-clout.jpg',
     video: 'https://youtu.be/CTPK1nQPGLM',
   },
