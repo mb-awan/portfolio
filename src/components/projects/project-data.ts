@@ -81,7 +81,7 @@ export const mbAwanProjects = [
   },
   {
     description:
-      'This is a snake game built using HTML, CSS, and JavaScript, where the user can control the snake using arrow keys on desktop, Its reponsive provide buttons for the mobile users as well',
+      'This is a snake game built using HTML, CSS, and JavaScript, where the user can control the snake using arrow keys on desktop, Its responsive provide buttons for the mobile users as well',
     name: 'Snake Game',
     repo: 'https://github.com/mb-awan/snake-game.git',
     technologies: ['HTML', 'CSS', 'JS'],
