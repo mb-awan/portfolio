@@ -91,7 +91,7 @@ export const mbAwanProjects = [
   },
   {
     description:
-      'This is a tik tak toe game built using HTML, CSS, and JavaScript, where two users can play the game at the same computer',
+      'This is a tic-tac-toe game built using HTML, CSS, and JavaScript, where two users can play the game on the same computer.',
     name: 'Tic Tac Toe Game',
     repo: 'https://github.com/mb-awan/tik-tak-toe.git',
     technologies: ['HTML', 'CSS', 'JS'],
