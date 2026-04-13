@@ -4,7 +4,7 @@ export const experiences: ExperienceItem[] = [
   {
     company: 'Slark Labs - (Startup)',
     date: {
-      end: 'August 2025',
+      end: 'Present',
       start: 'February 2024',
     },
     description:
