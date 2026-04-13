@@ -1,6 +1,6 @@
 export const siteConfig = {
   assets: {
-    avatar: '/assets/images/avatar.png',
+    avatar: '/assets/images/avatar-2026.png',
     discordGif: '/assets/gifs/discord.gif',
     logo: '/assets/images/logo.png',
     resume: '/assets/resume/Muhammad Bilal Resume 2026.pdf',
