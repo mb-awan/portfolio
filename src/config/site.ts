@@ -3,7 +3,7 @@ export const siteConfig = {
     avatar: '/assets/images/avatar.png',
     discordGif: '/assets/gifs/discord.gif',
     logo: '/assets/images/logo.png',
-    resume: '/assets/resume/Muhammad-Bilal-Resume-2025.pdf',
+    resume: '/assets/resume/Muhammad Bilal Resume 2026.pdf',
   },
   description: 'Software Engineer, PUCITian, MERN Stack Developer based in Lahore, Pakistan.',
   keywords: [
