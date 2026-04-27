@@ -40,3 +40,4 @@ next-env.d.ts
 .env.production
 .env.*
 !.env.example
+.env.development
