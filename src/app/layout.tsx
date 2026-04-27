@@ -4,8 +4,9 @@ import { PropsWithChildren } from 'react';
 
 import { Raleway } from 'next/font/google';
 
-import { ThemeProvider } from '@/components/common/providers';
+import { AppProviders } from '@/components/common/app-providers';
 import { siteConfig } from '@/config/site';
+import { getSessionUser } from '@/lib/auth/session';
 
 import '@/styles/globals.css';
 
@@ -55,17 +56,23 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
+export default async function RootLayout({ children }: PropsWithChildren): Promise<React.JSX.Element> {
+  const initialUser = await getSessionUser();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={raleway.variable}>
-        <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
+        <AppProviders
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableSystem
+          initialUser={initialUser}
+        >
           <div className="relative flex min-h-screen flex-col">{children}</div>
-        </ThemeProvider>
+        </AppProviders>
       </body>
     </html>
   );
-};
-
-export default RootLayout;
+}

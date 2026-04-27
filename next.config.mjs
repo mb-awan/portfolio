@@ -4,6 +4,7 @@ import million from 'million/compiler';
 const nextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion'],
+    serverComponentsExternalPackages: ['mongoose'],
     webVitalsAttribution: ['FCP', 'LCP', 'CLS', 'FID', 'TTFB', 'INP'],
   },
   images: {
@@ -11,8 +12,9 @@ const nextConfig = {
     formats: ['image/avif'],
     remotePatterns: [
       { hostname: 'cdn.discordapp.com' },
-      { hostname: 'media.discordapp.net' },
       { hostname: 'dcdn.dstn.to' },
+      { hostname: 'media.discordapp.net' },
+      { hostname: 'res.cloudinary.com' },
     ],
   },
   reactStrictMode: true,
