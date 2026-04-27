@@ -113,6 +113,7 @@ export const GitHubRepositoryHoverCard: React.FC<GitHubRepositoryHoverCardProps>
                     width="100%"
                   />
                 ) : selectedItem.thumbnail ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img alt={selectedItem.name} className="mx-auto rounded-lg" src={selectedItem.thumbnail} />
                 ) : (
                   <div className="h-[300px] w-full rounded-lg bg-muted" />
