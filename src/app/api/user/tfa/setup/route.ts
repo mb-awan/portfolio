@@ -27,7 +27,7 @@ export async function POST(): Promise<NextResponse> {
     user.tfaSetupSecret = secret;
     await user.save();
 
-    const otpauthUrl = totpProvisioningUri({ email: user.email, issuer: 'Portfolio', secret });
+    const otpauthUrl = totpProvisioningUri({ email: user.email, issuer: 'Muhammad Bilal', secret });
     const qrDataUrl = await QRCode.toDataURL(otpauthUrl);
 
     return NextResponse.json({
