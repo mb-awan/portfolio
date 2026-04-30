@@ -10,7 +10,7 @@ export const experiences: ExperienceItem[] = [
     description:
       'I worked on SaaS applications UnifyPosts and Wrytify, as well as Webflow extensions and AWS Lambda functions. I also helped set up management tools, led the team, and trained interns while managing their contributions.',
     employmentType: EmploymentType.FullTime,
-    image: '/assets/companies/upwork.jpg',
+    image: '/assets/companies/slark-labs.png',
     skills: [
       'SAAS Apps',
       'Team Leading',
