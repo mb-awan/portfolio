@@ -19,10 +19,19 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     const passwordHash = await hashPassword(body.password);
     const user = await User.create({
+      address: {
+        city: body.address.city.trim(),
+        country: body.address.country.trim(),
+        district: body.address.district.trim(),
+        province: body.address.province.trim(),
+        zipCode: body.address.zipCode.trim(),
+      },
       email: body.email.toLowerCase(),
       emailVerified: false,
+      location: '',
       name: body.name,
       passwordHash,
+      phone: body.phone.trim(),
     });
 
     await issueOtp(user._id.toString(), user.email, 'EMAIL_VERIFY');

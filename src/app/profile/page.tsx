@@ -10,7 +10,7 @@ export default async function ProfilePage() {
     redirect(`/?auth=signIn&from=${encodeURIComponent('/profile')}`);
   }
   return (
-    <div className="container max-w-2xl py-10">
+    <div className="container max-w-3xl py-10">
       <ProfileForm initialUser={user} />
     </div>
   );

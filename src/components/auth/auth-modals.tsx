@@ -190,12 +190,34 @@ function SignUpForm({ onOpenVerify, onSwitchToSignIn }: SignUpFormProps): React.
   return (
     <Formik
       initialStatus={undefined as { error?: string } | undefined}
-      initialValues={{ email: '', name: '', password: '' }}
+      initialValues={{
+        addressCity: '',
+        addressCountry: '',
+        addressDistrict: '',
+        addressProvince: '',
+        addressZipCode: '',
+        email: '',
+        name: '',
+        password: '',
+        phone: '',
+      }}
       onSubmit={async (values, { setStatus, setSubmitting }) => {
         setStatus(undefined);
         try {
           const res = await fetch('/api/auth/register', {
-            body: JSON.stringify({ email: values.email, name: values.name, password: values.password }),
+            body: JSON.stringify({
+              address: {
+                city: values.addressCity.trim(),
+                country: values.addressCountry.trim(),
+                district: values.addressDistrict.trim(),
+                province: values.addressProvince.trim(),
+                zipCode: values.addressZipCode.trim(),
+              },
+              email: values.email,
+              name: values.name,
+              password: values.password,
+              phone: values.phone,
+            }),
             headers: { 'Content-Type': 'application/json' },
             method: 'POST',
           });
@@ -255,6 +277,103 @@ function SignUpForm({ onOpenVerify, onSwitchToSignIn }: SignUpFormProps): React.
                 value={values.email}
               />
               <FieldError name="email" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-foreground" htmlFor="am-reg-phone">
+                Phone
+              </Label>
+              <Input
+                autoComplete="tel"
+                className={inputClass}
+                id="am-reg-phone"
+                inputMode="tel"
+                name="phone"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                placeholder="+1 555 123 4567"
+                type="tel"
+                value={values.phone}
+              />
+              <FieldError name="phone" />
+            </div>
+            <div className="space-y-3 rounded-xl border border-border/50 bg-muted/20 p-3">
+              <p className="text-sm font-medium text-foreground">Address</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-2 sm:col-span-2">
+                  <Label className="text-foreground" htmlFor="am-reg-city">
+                    City
+                  </Label>
+                  <Input
+                    autoComplete="address-level2"
+                    className={inputClass}
+                    id="am-reg-city"
+                    name="addressCity"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.addressCity}
+                  />
+                  <FieldError name="addressCity" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-foreground" htmlFor="am-reg-district">
+                    District
+                  </Label>
+                  <Input
+                    className={inputClass}
+                    id="am-reg-district"
+                    name="addressDistrict"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.addressDistrict}
+                  />
+                  <FieldError name="addressDistrict" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-foreground" htmlFor="am-reg-province">
+                    Province / state
+                  </Label>
+                  <Input
+                    autoComplete="address-level1"
+                    className={inputClass}
+                    id="am-reg-province"
+                    name="addressProvince"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.addressProvince}
+                  />
+                  <FieldError name="addressProvince" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-foreground" htmlFor="am-reg-country">
+                    Country
+                  </Label>
+                  <Input
+                    autoComplete="country-name"
+                    className={inputClass}
+                    id="am-reg-country"
+                    name="addressCountry"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.addressCountry}
+                  />
+                  <FieldError name="addressCountry" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-foreground" htmlFor="am-reg-zip">
+                    ZIP / postal code
+                  </Label>
+                  <Input
+                    autoComplete="postal-code"
+                    className={inputClass}
+                    id="am-reg-zip"
+                    name="addressZipCode"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.addressZipCode}
+                  />
+                  <FieldError name="addressZipCode" />
+                </div>
+              </div>
             </div>
             <PasswordFormField
               autoComplete="new-password"

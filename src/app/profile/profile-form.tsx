@@ -1,7 +1,17 @@
 'use client';
 
+import type {
+  BusinessDetails,
+  EducationEntry,
+  ExperienceEntry,
+  Gender,
+  PostalAddress,
+  SocialLink,
+} from '@/types/user-profile';
+
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react';
 
+import { EMPTY_BUSINESS_DETAILS, EMPTY_POSTAL_ADDRESS } from '@/types/user-profile';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -17,6 +27,45 @@ import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
+import { emptyEducationRow, emptyExperienceRow, emptySocialLink } from '@/lib/user/profile-response';
+import { SOCIAL_PLATFORM_OPTIONS } from '@/lib/user/social-platforms';
+
+const GENDER_SELECT: { label: string; value: Gender }[] = [
+  { label: 'Prefer not to say', value: 'prefer_not_say' },
+  { label: 'Male', value: 'male' },
+  { label: 'Female', value: 'female' },
+  { label: 'Non-binary', value: 'non_binary' },
+  { label: 'Other', value: 'other' },
+];
+
+function filterSocialLinks(list: SocialLink[]): SocialLink[] {
+  return list.filter((l) => l.platform.trim().length > 0 && l.url.trim().length > 0);
+}
+
+function genderForForm(g: Gender | string | undefined): Gender | string {
+  return !g || g === '' ? 'prefer_not_say' : g;
+}
+
+function filterEducationEntries(list: EducationEntry[]): EducationEntry[] {
+  return list.filter(
+    (e) =>
+      [e.institution, e.degree, e.field, e.notes].some((s) => s.trim().length > 0) ||
+      e.startYear != null ||
+      e.endYear != null
+  );
+}
+
+function filterExperienceEntries(list: ExperienceEntry[]): ExperienceEntry[] {
+  return list.filter((e) =>
+    [e.title, e.company, e.description, e.location, e.startDate, e.endDate, e.employmentType].some(
+      (s) => s.trim().length > 0
+    )
+  );
+}
+
+function hasBusinessContent(b: BusinessDetails): boolean {
+  return Object.values(b).some((v) => v.trim().length > 0);
+}
 
 type ProfileFormProps = {
   initialUser: PublicUser;
@@ -27,6 +76,22 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
   const [user, setUser] = useState(initialUser);
   const [name, setName] = useState(user.name);
   const [bio, setBio] = useState(user.bio);
+  const [phone, setPhone] = useState(user.phone);
+  const [address, setAddress] = useState<PostalAddress>(() => ({ ...EMPTY_POSTAL_ADDRESS, ...user.address }));
+  const [gender, setGender] = useState<Gender | string>(() => genderForForm(user.gender));
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>(() =>
+    user.socialLinks?.length ? user.socialLinks : [emptySocialLink()]
+  );
+  const [education, setEducation] = useState<EducationEntry[]>(() =>
+    user.education?.length ? user.education : [emptyEducationRow()]
+  );
+  const [experience, setExperience] = useState<ExperienceEntry[]>(() =>
+    user.experience?.length ? user.experience : [emptyExperienceRow()]
+  );
+  const [business, setBusiness] = useState<BusinessDetails>(() => ({
+    ...EMPTY_BUSINESS_DETAILS,
+    ...(user.businessDetails ?? EMPTY_BUSINESS_DETAILS),
+  }));
   const [message, setMessage] = useState<null | string>(null);
   const [error, setError] = useState<null | string>(null);
   const [saving, setSaving] = useState(false);
@@ -50,6 +115,19 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
   const [cropOpen, setCropOpen] = useState(false);
   const [photoPreviewOpen, setPhotoPreviewOpen] = useState(false);
 
+  useEffect(() => {
+    setUser(initialUser);
+    setName(initialUser.name);
+    setBio(initialUser.bio);
+    setPhone(initialUser.phone);
+    setAddress({ ...EMPTY_POSTAL_ADDRESS, ...initialUser.address });
+    setGender(genderForForm(initialUser.gender));
+    setSocialLinks(initialUser.socialLinks?.length ? initialUser.socialLinks : [emptySocialLink()]);
+    setEducation(initialUser.education?.length ? initialUser.education : [emptyEducationRow()]);
+    setExperience(initialUser.experience?.length ? initialUser.experience : [emptyExperienceRow()]);
+    setBusiness({ ...EMPTY_BUSINESS_DETAILS, ...(initialUser.businessDetails ?? EMPTY_BUSINESS_DETAILS) });
+  }, [initialUser]);
+
   async function saveProfile(e: FormEvent) {
     e.preventDefault();
     setError(null);
@@ -57,7 +135,23 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
     setSaving(true);
     try {
       const res = await fetch('/api/user/me', {
-        body: JSON.stringify({ bio, name }),
+        body: JSON.stringify({
+          address: {
+            city: address.city.trim(),
+            country: address.country.trim(),
+            district: address.district.trim(),
+            province: address.province.trim(),
+            zipCode: address.zipCode.trim(),
+          },
+          bio,
+          businessDetails: hasBusinessContent(business) ? business : { ...EMPTY_BUSINESS_DETAILS },
+          education: filterEducationEntries(education),
+          experience: filterExperienceEntries(experience),
+          gender,
+          name,
+          phone: phone.trim(),
+          socialLinks: filterSocialLinks(socialLinks),
+        }),
         headers: { 'Content-Type': 'application/json' },
         method: 'PATCH',
       });
@@ -66,16 +160,16 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
         setError(data.error ?? 'Could not save profile');
         return;
       }
-      setUser((u) => ({
-        ...u,
-        bio: data.bio,
-        email: data.email,
-        emailVerified: data.emailVerified,
-        id: data.id,
-        imageUrl: data.imageUrl,
-        name: data.name,
-        tfaEnabled: data.tfaEnabled,
-      }));
+      setUser(data);
+      setName(data.name);
+      setBio(data.bio);
+      setPhone(data.phone);
+      setAddress({ ...EMPTY_POSTAL_ADDRESS, ...data.address });
+      setGender(genderForForm(data.gender));
+      setSocialLinks(data.socialLinks?.length ? data.socialLinks : [emptySocialLink()]);
+      setEducation(data.education?.length ? data.education : [emptyEducationRow()]);
+      setExperience(data.experience?.length ? data.experience : [emptyExperienceRow()]);
+      setBusiness({ ...EMPTY_BUSINESS_DETAILS, ...(data.businessDetails ?? EMPTY_BUSINESS_DETAILS) });
       setMessage('Profile updated');
       router.refresh();
     } catch {
@@ -127,7 +221,7 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
       setError(data.error ?? 'Could not save photo URL');
       return false;
     }
-    setUser((u) => ({ ...u, imageUrl: data.imageUrl }));
+    setUser(data);
     setMessage('Profile photo updated');
     router.refresh();
     return true;
@@ -187,7 +281,7 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
         setError(data.error ?? 'Could not remove photo');
         return;
       }
-      setUser((u) => ({ ...u, imageUrl: null }));
+      setUser(data);
       setMessage('Profile photo removed');
       router.refresh();
     } catch {
@@ -347,6 +441,27 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
         </Alert>
       ) : null}
 
+      <Card className="border-primary/20 bg-muted/10">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg">Profile completion</CardTitle>
+          <CardDescription>
+            Fill in the sections below to reach 100%. This score updates when you save your profile.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div className="flex items-center justify-between gap-2 text-sm">
+            <span className="font-medium tabular-nums">{user.profileCompletionPercent}%</span>
+            <span className="text-muted-foreground">Complete</span>
+          </div>
+          <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-primary transition-[width] duration-300"
+              style={{ width: `${Math.min(100, Math.max(0, user.profileCompletionPercent))}%` }}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Photo</CardTitle>
@@ -414,13 +529,15 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
         </DialogContent>
       </Dialog>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Details</CardTitle>
-          <CardDescription>Your name and bio are shown only in this authenticated profile area.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-4" onSubmit={saveProfile}>
+      <form className="space-y-8" onSubmit={saveProfile}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Details</CardTitle>
+            <CardDescription>
+              Contact, structured address, gender, social links, and bio. Registration requires phone and full address.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input disabled id="email" readOnly value={user.email} />
@@ -431,15 +548,447 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
               <Input id="name" onChange={(e) => setName(e.target.value)} required value={name} />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                autoComplete="tel"
+                id="phone"
+                inputMode="tel"
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+1 555 123 4567"
+                required
+                type="tel"
+                value={phone}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="gender">Gender</Label>
+              <select
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                id="gender"
+                onChange={(e) => setGender(e.target.value as Gender)}
+                value={gender}
+              >
+                {GENDER_SELECT.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-3">
+              <p className="text-sm font-medium">Address</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-2 sm:col-span-2">
+                  <Label htmlFor="addr-city">City</Label>
+                  <Input
+                    autoComplete="address-level2"
+                    id="addr-city"
+                    onChange={(e) => setAddress((a) => ({ ...a, city: e.target.value }))}
+                    required
+                    value={address.city}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="addr-district">District</Label>
+                  <Input
+                    id="addr-district"
+                    onChange={(e) => setAddress((a) => ({ ...a, district: e.target.value }))}
+                    required
+                    value={address.district}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="addr-province">Province / state</Label>
+                  <Input
+                    autoComplete="address-level1"
+                    id="addr-province"
+                    onChange={(e) => setAddress((a) => ({ ...a, province: e.target.value }))}
+                    required
+                    value={address.province}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="addr-country">Country</Label>
+                  <Input
+                    autoComplete="country-name"
+                    id="addr-country"
+                    onChange={(e) => setAddress((a) => ({ ...a, country: e.target.value }))}
+                    required
+                    value={address.country}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="addr-zip">ZIP / postal code</Label>
+                  <Input
+                    autoComplete="postal-code"
+                    id="addr-zip"
+                    onChange={(e) => setAddress((a) => ({ ...a, zipCode: e.target.value }))}
+                    required
+                    value={address.zipCode}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-end justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium">Social profiles</p>
+                  <p className="text-xs text-muted-foreground">Add links visitors can use to find you.</p>
+                </div>
+                <Button
+                  onClick={() => setSocialLinks((rows) => [...rows, emptySocialLink()])}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  Add link
+                </Button>
+              </div>
+              <div className="space-y-3">
+                {socialLinks.map((row, idx) => (
+                  <div
+                    className="flex flex-col gap-2 rounded-lg border border-border/60 p-3 sm:flex-row sm:items-end"
+                    key={`soc-${idx}`}
+                  >
+                    <div className="space-y-2 sm:w-44">
+                      <Label htmlFor={`soc-plat-${idx}`}>Platform</Label>
+                      <select
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        id={`soc-plat-${idx}`}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          setSocialLinks((rows) => rows.map((r, i) => (i === idx ? { ...r, platform: v } : r)));
+                        }}
+                        value={row.platform || 'website'}
+                      >
+                        {SOCIAL_PLATFORM_OPTIONS.map((o) => (
+                          <option key={o.value} value={o.value}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <Label htmlFor={`soc-url-${idx}`}>URL</Label>
+                      <Input
+                        id={`soc-url-${idx}`}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          setSocialLinks((rows) => rows.map((r, i) => (i === idx ? { ...r, url: v } : r)));
+                        }}
+                        placeholder="https://"
+                        type="url"
+                        value={row.url}
+                      />
+                    </div>
+                    {socialLinks.length > 1 ? (
+                      <Button
+                        className="sm:mb-0.5"
+                        onClick={() => setSocialLinks((rows) => rows.filter((_, i) => i !== idx))}
+                        size="sm"
+                        type="button"
+                        variant="ghost"
+                      >
+                        Remove
+                      </Button>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="bio">Bio</Label>
               <Textarea id="bio" onChange={(e) => setBio(e.target.value)} rows={4} value={bio} />
             </div>
-            <Button disabled={saving} type="submit">
-              {saving ? 'Saving…' : 'Save changes'}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Education</CardTitle>
+            <CardDescription>Optional — schools, degrees, and notes.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {education.map((row, idx) => (
+              <div className="space-y-3 rounded-lg border border-border/60 p-4" key={`edu-${idx}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-medium">Entry {idx + 1}</span>
+                  {education.length > 1 ? (
+                    <Button
+                      onClick={() => setEducation(education.filter((_, i) => i !== idx))}
+                      size="sm"
+                      type="button"
+                      variant="ghost"
+                    >
+                      Remove
+                    </Button>
+                  ) : null}
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-2 sm:col-span-2">
+                    <Label htmlFor={`edu-inst-${idx}`}>Institution</Label>
+                    <Input
+                      id={`edu-inst-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setEducation((rows) => rows.map((r, i) => (i === idx ? { ...r, institution: v } : r)));
+                      }}
+                      value={row.institution}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`edu-degree-${idx}`}>Degree / qualification</Label>
+                    <Input
+                      id={`edu-degree-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setEducation((rows) => rows.map((r, i) => (i === idx ? { ...r, degree: v } : r)));
+                      }}
+                      value={row.degree}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`edu-field-${idx}`}>Field of study</Label>
+                    <Input
+                      id={`edu-field-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setEducation((rows) => rows.map((r, i) => (i === idx ? { ...r, field: v } : r)));
+                      }}
+                      value={row.field}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`edu-start-${idx}`}>Start year</Label>
+                    <Input
+                      id={`edu-start-${idx}`}
+                      inputMode="numeric"
+                      onChange={(e) => {
+                        const raw = e.target.value.trim();
+                        const y = raw === '' ? undefined : Number.parseInt(raw, 10);
+                        setEducation((rows) =>
+                          rows.map((r, i) => (i === idx ? { ...r, startYear: Number.isFinite(y) ? y : undefined } : r))
+                        );
+                      }}
+                      placeholder="e.g. 2018"
+                      value={row.startYear ?? ''}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`edu-end-${idx}`}>End year</Label>
+                    <Input
+                      id={`edu-end-${idx}`}
+                      inputMode="numeric"
+                      onChange={(e) => {
+                        const raw = e.target.value.trim();
+                        const y = raw === '' ? undefined : Number.parseInt(raw, 10);
+                        setEducation((rows) =>
+                          rows.map((r, i) => (i === idx ? { ...r, endYear: Number.isFinite(y) ? y : undefined } : r))
+                        );
+                      }}
+                      placeholder="e.g. 2022"
+                      value={row.endYear ?? ''}
+                    />
+                  </div>
+                  <div className="space-y-2 sm:col-span-2">
+                    <Label htmlFor={`edu-notes-${idx}`}>Notes</Label>
+                    <Textarea
+                      id={`edu-notes-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setEducation((rows) => rows.map((r, i) => (i === idx ? { ...r, notes: v } : r)));
+                      }}
+                      rows={2}
+                      value={row.notes}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <Button
+              onClick={() => setEducation((rows) => [...rows, emptyEducationRow()])}
+              type="button"
+              variant="outline"
+            >
+              Add education
             </Button>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Experience</CardTitle>
+            <CardDescription>Optional — roles and employment history.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {experience.map((row, idx) => (
+              <div className="space-y-3 rounded-lg border border-border/60 p-4" key={`exp-${idx}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-medium">Role {idx + 1}</span>
+                  {experience.length > 1 ? (
+                    <Button
+                      onClick={() => setExperience(experience.filter((_, i) => i !== idx))}
+                      size="sm"
+                      type="button"
+                      variant="ghost"
+                    >
+                      Remove
+                    </Button>
+                  ) : null}
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor={`ex-title-${idx}`}>Title</Label>
+                    <Input
+                      id={`ex-title-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExperience((rows) => rows.map((r, i) => (i === idx ? { ...r, title: v } : r)));
+                      }}
+                      value={row.title}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`ex-company-${idx}`}>Company</Label>
+                    <Input
+                      id={`ex-company-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExperience((rows) => rows.map((r, i) => (i === idx ? { ...r, company: v } : r)));
+                      }}
+                      value={row.company}
+                    />
+                  </div>
+                  <div className="space-y-2 sm:col-span-2">
+                    <Label htmlFor={`ex-loc-${idx}`}>Location</Label>
+                    <Input
+                      id={`ex-loc-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExperience((rows) => rows.map((r, i) => (i === idx ? { ...r, location: v } : r)));
+                      }}
+                      value={row.location}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`ex-type-${idx}`}>Employment type</Label>
+                    <Input
+                      id={`ex-type-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExperience((rows) => rows.map((r, i) => (i === idx ? { ...r, employmentType: v } : r)));
+                      }}
+                      placeholder="Full-time, contract…"
+                      value={row.employmentType}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`ex-start-${idx}`}>Start</Label>
+                    <Input
+                      id={`ex-start-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExperience((rows) => rows.map((r, i) => (i === idx ? { ...r, startDate: v } : r)));
+                      }}
+                      placeholder="Month/year"
+                      value={row.startDate}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`ex-end-${idx}`}>End</Label>
+                    <Input
+                      id={`ex-end-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExperience((rows) => rows.map((r, i) => (i === idx ? { ...r, endDate: v } : r)));
+                      }}
+                      placeholder="Present or date"
+                      value={row.endDate}
+                    />
+                  </div>
+                  <div className="space-y-2 sm:col-span-2">
+                    <Label htmlFor={`ex-desc-${idx}`}>Description</Label>
+                    <Textarea
+                      id={`ex-desc-${idx}`}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setExperience((rows) => rows.map((r, i) => (i === idx ? { ...r, description: v } : r)));
+                      }}
+                      rows={3}
+                      value={row.description}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <Button
+              onClick={() => setExperience((rows) => [...rows, emptyExperienceRow()])}
+              type="button"
+              variant="outline"
+            >
+              Add experience
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Business & professional</CardTitle>
+            <CardDescription>Optional — company or freelance details.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2 sm:col-span-2">
+              <Label htmlFor="biz-company">Company / brand name</Label>
+              <Input
+                id="biz-company"
+                onChange={(e) => setBusiness((b) => ({ ...b, companyName: e.target.value }))}
+                value={business.companyName}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="biz-role">Your role</Label>
+              <Input
+                id="biz-role"
+                onChange={(e) => setBusiness((b) => ({ ...b, role: e.target.value }))}
+                value={business.role}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="biz-industry">Industry</Label>
+              <Input
+                id="biz-industry"
+                onChange={(e) => setBusiness((b) => ({ ...b, industry: e.target.value }))}
+                value={business.industry}
+              />
+            </div>
+            <div className="space-y-2 sm:col-span-2">
+              <Label htmlFor="biz-web">Website</Label>
+              <Input
+                id="biz-web"
+                onChange={(e) => setBusiness((b) => ({ ...b, website: e.target.value }))}
+                placeholder="https://"
+                type="url"
+                value={business.website}
+              />
+            </div>
+            <div className="space-y-2 sm:col-span-2">
+              <Label htmlFor="biz-desc">Description</Label>
+              <Textarea
+                id="biz-desc"
+                onChange={(e) => setBusiness((b) => ({ ...b, description: e.target.value }))}
+                rows={3}
+                value={business.description}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="flex flex-wrap gap-2">
+          <Button disabled={saving} type="submit">
+            {saving ? 'Saving…' : 'Save profile'}
+          </Button>
+        </div>
+      </form>
 
       <Card>
         <CardHeader>

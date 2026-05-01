@@ -6,6 +6,19 @@ export const signInFormSchema = yup.object({
 });
 
 export const signUpFormSchema = yup.object({
+  addressCity: yup.string().min(1, 'City is required').max(120, 'Too long').required('City is required'),
+  addressCountry: yup.string().min(1, 'Country is required').max(120, 'Too long').required('Country is required'),
+  addressDistrict: yup.string().min(1, 'District is required').max(120, 'Too long').required('District is required'),
+  addressProvince: yup
+    .string()
+    .min(1, 'Province / state is required')
+    .max(120, 'Too long')
+    .required('Province / state is required'),
+  addressZipCode: yup
+    .string()
+    .min(1, 'ZIP / postal code is required')
+    .max(32, 'Too long')
+    .required('ZIP / postal code is required'),
   email: yup.string().email('Enter a valid email').max(255, 'Email is too long').required('Email is required'),
   name: yup.string().min(1, 'Name is required').max(120, 'Name is too long').required('Name is required'),
   password: yup
@@ -13,6 +26,13 @@ export const signUpFormSchema = yup.object({
     .min(8, 'Use at least 8 characters')
     .max(128, 'Password is too long')
     .required('Password is required'),
+  phone: yup
+    .string()
+    .trim()
+    .min(7, 'Phone number is required')
+    .max(30)
+    .matches(/^[\d\s\-+().]+$/, 'Use digits and common phone symbols')
+    .required('Phone is required'),
 });
 
 const otp6 = yup

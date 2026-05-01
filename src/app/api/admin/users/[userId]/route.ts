@@ -3,13 +3,43 @@ import { User } from '@/models/User';
 import { Types } from 'mongoose';
 import { NextResponse } from 'next/server';
 
+import { mapAdminUserDetail } from '@/lib/admin/map-admin-user';
 import { type PermissionKey } from '@/lib/admin/permission-registry';
-import { requireAdminSessionWithPermissions } from '@/lib/admin/require-admin-api';
+import { requireAdminSession, requireAdminSessionWithPermissions } from '@/lib/admin/require-admin-api';
 import { handleApiError, jsonError } from '@/lib/api/route-error';
 import { connectMongo } from '@/lib/db/mongoose';
 import { adminPatchUserSchema } from '@/lib/validation/admin';
 
 type RouteContext = { params: { userId: string } };
+
+export async function GET(_request: Request, context: RouteContext): Promise<NextResponse> {
+  try {
+    const { userId } = context.params;
+    if (!Types.ObjectId.isValid(userId)) {
+      return jsonError('Invalid user id', 400);
+    }
+
+    const authResult = await requireAdminSession('users.view');
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+
+    await connectMongo();
+
+    const doc = await User.findById(userId)
+      .select('-passwordHash -tfaSecret -tfaSetupSecret')
+      .populate('role', 'description slug name')
+      .lean();
+
+    if (!doc) {
+      return jsonError('User not found', 404);
+    }
+
+    return NextResponse.json({ user: mapAdminUserDetail(doc) });
+  } catch (error: unknown) {
+    return handleApiError(error);
+  }
+}
 
 export async function PATCH(request: Request, context: RouteContext): Promise<NextResponse> {
   try {

@@ -1,7 +1,7 @@
 import { User } from '@/models/User';
-import { Types } from 'mongoose';
 import { NextResponse } from 'next/server';
 
+import { mapAdminUserListItem } from '@/lib/admin/map-admin-user';
 import { requireAdminSession } from '@/lib/admin/require-admin-api';
 import { handleApiError, jsonError } from '@/lib/api/route-error';
 import { connectMongo } from '@/lib/db/mongoose';
@@ -28,12 +28,20 @@ export async function GET(request: Request): Promise<NextResponse> {
 
     await connectMongo();
 
+    const rx = escapeRegex(q.trim());
     const filter =
       q.trim().length > 0
         ? {
             $or: [
-              { email: { $options: 'i', $regex: escapeRegex(q.trim()) } },
-              { name: { $options: 'i', $regex: escapeRegex(q.trim()) } },
+              { email: { $options: 'i', $regex: rx } },
+              { location: { $options: 'i', $regex: rx } },
+              { name: { $options: 'i', $regex: rx } },
+              { phone: { $options: 'i', $regex: rx } },
+              { 'address.city': { $options: 'i', $regex: rx } },
+              { 'address.district': { $options: 'i', $regex: rx } },
+              { 'address.province': { $options: 'i', $regex: rx } },
+              { 'address.country': { $options: 'i', $regex: rx } },
+              { 'address.zipCode': { $options: 'i', $regex: rx } },
             ],
           }
         : {};
@@ -49,21 +57,7 @@ export async function GET(request: Request): Promise<NextResponse> {
       User.countDocuments(filter),
     ]);
 
-    const users = items.map((u) => ({
-      createdAt: u.createdAt,
-      email: u.email,
-      emailVerified: u.emailVerified,
-      id: u._id.toString(),
-      name: u.name,
-      role:
-        u.role && typeof u.role === 'object' && '_id' in u.role
-          ? {
-              id: (u.role._id as Types.ObjectId).toString(),
-              name: (u.role as { name?: string }).name,
-              slug: (u.role as { slug?: string }).slug,
-            }
-          : null,
-    }));
+    const users = items.map((u) => mapAdminUserListItem(u));
 
     return NextResponse.json({ limit, page, total, users });
   } catch (error: unknown) {

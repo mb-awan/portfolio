@@ -9,6 +9,7 @@ import { verifyPassword } from '@/lib/auth/password';
 import { getSessionUser } from '@/lib/auth/session';
 import { deleteCloudinaryImageByUrl, shouldDeleteOldImageBeforeStoringNew } from '@/lib/cloudinary/delete-asset';
 import { connectMongo } from '@/lib/db/mongoose';
+import { profileFieldsFromUser } from '@/lib/user/profile-response';
 import { deleteAccountSchema, updateProfileSchema } from '@/lib/validation/auth';
 
 export async function GET(): Promise<NextResponse> {
@@ -24,7 +25,7 @@ export async function GET(): Promise<NextResponse> {
     }
     const rbac = await getRbacForUser(user as UserDocument);
     return NextResponse.json({
-      bio: user.bio ?? '',
+      ...profileFieldsFromUser(user as UserDocument),
       email: user.email,
       emailVerified: user.emailVerified,
       id: user._id.toString(),
@@ -72,12 +73,66 @@ export async function PATCH(request: Request): Promise<NextResponse> {
         user.imageUrl = body.imageUrl;
       }
     }
+    if (body.phone !== undefined) {
+      user.phone = body.phone.trim();
+    }
+    if (body.gender !== undefined) {
+      user.gender = body.gender;
+    }
+    if (body.address !== undefined) {
+      const prev = (user.address ?? {}) as Record<string, string>;
+      user.set('address', {
+        city: body.address.city !== undefined ? body.address.city.trim() : prev.city ?? '',
+        country: body.address.country !== undefined ? body.address.country.trim() : prev.country ?? '',
+        district: body.address.district !== undefined ? body.address.district.trim() : prev.district ?? '',
+        province: body.address.province !== undefined ? body.address.province.trim() : prev.province ?? '',
+        zipCode: body.address.zipCode !== undefined ? body.address.zipCode.trim() : prev.zipCode ?? '',
+      });
+    }
+    if (body.socialLinks !== undefined) {
+      user.socialLinks = body.socialLinks
+        .map((l) => ({ platform: l.platform.trim(), url: l.url.trim() }))
+        .filter((l) => l.platform.length > 0 && l.url.length > 0);
+    }
+    if (body.education !== undefined) {
+      user.education = body.education.map((e) => ({
+        degree: e.degree?.trim() ?? '',
+        endYear: e.endYear,
+        field: e.field?.trim() ?? '',
+        institution: e.institution?.trim() ?? '',
+        notes: e.notes?.trim() ?? '',
+        startYear: e.startYear,
+      }));
+    }
+    if (body.experience !== undefined) {
+      user.experience = body.experience.map((e) => ({
+        company: e.company?.trim() ?? '',
+        description: e.description?.trim() ?? '',
+        employmentType: e.employmentType?.trim() ?? '',
+        endDate: e.endDate?.trim() ?? '',
+        location: e.location?.trim() ?? '',
+        startDate: e.startDate?.trim() ?? '',
+        title: e.title?.trim() ?? '',
+      }));
+    }
+    if (body.businessDetails !== undefined) {
+      const d = body.businessDetails;
+      const merged = {
+        companyName: d.companyName?.trim() ?? '',
+        description: d.description?.trim() ?? '',
+        industry: d.industry?.trim() ?? '',
+        role: d.role?.trim() ?? '',
+        website: d.website?.trim() ?? '',
+      };
+      const allEmpty = Object.values(merged).every((v) => v.length === 0);
+      user.businessDetails = allEmpty ? undefined : merged;
+    }
 
     await user.save();
 
     const rbac = await getRbacForUser(user);
     return NextResponse.json({
-      bio: user.bio ?? '',
+      ...profileFieldsFromUser(user),
       email: user.email,
       emailVerified: user.emailVerified,
       id: user._id.toString(),

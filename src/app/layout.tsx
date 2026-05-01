@@ -60,12 +60,12 @@ export default async function RootLayout({ children }: PropsWithChildren): Promi
   const initialUser = await getSessionUser();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html className="dark" lang="en" suppressHydrationWarning>
       <head />
       <body className={raleway.variable}>
         <AppProviders
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           disableTransitionOnChange
           enableSystem
           initialUser={initialUser}
