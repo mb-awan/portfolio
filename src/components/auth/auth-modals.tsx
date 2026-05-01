@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { useSessionMe } from '@/hooks/use-session-me';
 import { Form, Formik, useField } from 'formik';
-import { ChevronLeft, LogOut, X } from 'lucide-react';
+import { ChevronLeft, LogOut, Shield, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -733,6 +733,14 @@ function AccountPanel({
           </div>
         </div>
         <div className="mt-4 flex flex-col gap-2">
+          {me.permissions?.includes('admin.access') ? (
+            <Button asChild className="h-11 w-full justify-center gap-2 rounded-xl" variant="secondary">
+              <Link href="/admin" onClick={onClose}>
+                <Shield aria-hidden className="size-4" />
+                Admin panel
+              </Link>
+            </Button>
+          ) : null}
           <Button asChild className="h-11 w-full justify-center rounded-xl" variant="default">
             <Link href="/profile" onClick={onClose}>
               Profile & settings

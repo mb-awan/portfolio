@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     }
   }
 
-  if (pathname.startsWith('/profile')) {
+  if (pathname.startsWith('/profile') || pathname.startsWith('/admin')) {
     if (!(await isAuthed())) {
       const url = request.nextUrl.clone();
       url.pathname = '/';
@@ -43,5 +43,5 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 }
 
 export const config = {
-  matcher: ['/profile/:path*', '/auth/:path*'],
+  matcher: ['/admin/:path*', '/auth/:path*', '/profile/:path*'],
 };

@@ -8,6 +8,7 @@ const userSchema = new Schema(
     imageUrl: { default: null, type: String },
     name: { maxlength: 120, required: true, trim: true, type: String },
     passwordHash: { required: true, type: String },
+    role: { default: null, ref: 'Role', type: Schema.Types.ObjectId },
     tfaEnabled: { default: false, type: Boolean },
     tfaSecret: { default: null, type: String },
     tfaSetupSecret: { default: null, type: String },

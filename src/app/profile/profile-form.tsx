@@ -351,8 +351,8 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
         <CardHeader>
           <CardTitle>Photo</CardTitle>
           <CardDescription>
-            Choose a picture, then crop and zoom in the editor. Photos are stored on Cloudinary; removing a photo
-            deletes it from Cloudinary. PNG, JPEG, or WebP, up to 8MB for the original file.
+            Choose a picture, then crop and zoom in the editor. Photos are stored on Cloud Server; removing a photo
+            deletes it from our cloud server as well. PNG, JPEG, or WebP, up to 8MB for the original file.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center">

@@ -1,7 +1,8 @@
 import { OtpToken } from '@/models/OtpToken';
-import { User } from '@/models/User';
+import { User, type UserDocument } from '@/models/User';
 import { NextResponse } from 'next/server';
 
+import { getRbacForUser } from '@/lib/admin/rbac';
 import { handleApiError, jsonError } from '@/lib/api/route-error';
 import { clearAuthCookie } from '@/lib/auth/cookies';
 import { verifyPassword } from '@/lib/auth/password';
@@ -21,6 +22,7 @@ export async function GET(): Promise<NextResponse> {
     if (!user) {
       return jsonError('Unauthorized', 401);
     }
+    const rbac = await getRbacForUser(user as UserDocument);
     return NextResponse.json({
       bio: user.bio ?? '',
       email: user.email,
@@ -28,6 +30,8 @@ export async function GET(): Promise<NextResponse> {
       id: user._id.toString(),
       imageUrl: user.imageUrl ?? null,
       name: user.name,
+      permissions: rbac.permissions,
+      roleSlug: rbac.roleSlug,
       tfaEnabled: user.tfaEnabled,
     });
   } catch (error: unknown) {
@@ -71,6 +75,7 @@ export async function PATCH(request: Request): Promise<NextResponse> {
 
     await user.save();
 
+    const rbac = await getRbacForUser(user);
     return NextResponse.json({
       bio: user.bio ?? '',
       email: user.email,
@@ -78,6 +83,8 @@ export async function PATCH(request: Request): Promise<NextResponse> {
       id: user._id.toString(),
       imageUrl: user.imageUrl ?? null,
       name: user.name,
+      permissions: rbac.permissions,
+      roleSlug: rbac.roleSlug,
       tfaEnabled: user.tfaEnabled,
     });
   } catch (error: unknown) {

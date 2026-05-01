@@ -1,6 +1,7 @@
 import { User, type UserDocument } from '@/models/User';
 import { cookies } from 'next/headers';
 
+import { getRbacForUser } from '@/lib/admin/rbac';
 import { AUTH_COOKIE_NAME } from '@/lib/auth/constants';
 import { verifyAuthToken } from '@/lib/auth/jwt';
 import { connectMongo } from '@/lib/db/mongoose';
@@ -12,10 +13,12 @@ export type PublicUser = {
   id: string;
   imageUrl: null | string;
   name: string;
+  permissions: string[];
+  roleSlug: null | string;
   tfaEnabled: boolean;
 };
 
-function toPublicUser(doc: UserDocument): PublicUser {
+function toPublicUser(doc: UserDocument, rbac: { permissions: string[]; roleSlug: null | string }): PublicUser {
   return {
     bio: doc.bio ?? '',
     email: doc.email,
@@ -23,6 +26,8 @@ function toPublicUser(doc: UserDocument): PublicUser {
     id: doc._id.toString(),
     imageUrl: doc.imageUrl ?? null,
     name: doc.name,
+    permissions: rbac.permissions,
+    roleSlug: rbac.roleSlug,
     tfaEnabled: doc.tfaEnabled,
   };
 }
@@ -39,7 +44,8 @@ export async function getSessionUser(): Promise<PublicUser | null> {
     if (!user) {
       return null;
     }
-    return toPublicUser(user as UserDocument);
+    const rbac = await getRbacForUser(user as UserDocument);
+    return toPublicUser(user as UserDocument, rbac);
   } catch {
     return null;
   }

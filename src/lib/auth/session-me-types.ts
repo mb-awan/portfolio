@@ -7,6 +7,8 @@ export type SessionMe = {
   id: string;
   imageUrl?: null | string;
   name: string;
+  permissions?: string[];
+  roleSlug?: null | string;
   tfaEnabled?: boolean;
 };
 
@@ -21,6 +23,8 @@ export function publicUserToSessionMe(u: PublicUser | null): SessionMe | null {
     id: u.id,
     imageUrl: u.imageUrl,
     name: u.name,
+    permissions: u.permissions,
+    roleSlug: u.roleSlug,
     tfaEnabled: u.tfaEnabled,
   };
 }
